@@ -5,10 +5,23 @@ from app.models.todo import Todo
 
 from app.response import response
 from app.transformer.TodoTransformer import TodoTransformer
+
+
 class TodoController(Resource):
-    def get(self):
-        todos = Todo.objects(deleted_at=None).all()
-        todos = TodoTransformer.transform(todos)
+    def get(self, id=None):
+        if not id:
+            q = request.args.get('q')
+
+
+            todos = Todo.objects(title__contains=q, deleted_at=None).all()
+            todos = TodoTransformer.transform(todos)
+        else:
+            todos = Todo.objects(id=id, deleted_at=None).first()
+            
+            if not todos:
+                return response.bad_request('Todo not found!', '')
+
+            todos = TodoTransformer.single_transform(todos)
 
         return response.ok('', todos)
 
@@ -33,6 +46,7 @@ class TodoController(Resource):
         todo.title = request.json['title']
         todo.description = request.json['description']
         todo.done = request.json['done']
+        todo.updated_at = datetime.now()
         todo.save()
 
         return response.ok('Todo Updated!', TodoTransformer.single_transform(todo))
