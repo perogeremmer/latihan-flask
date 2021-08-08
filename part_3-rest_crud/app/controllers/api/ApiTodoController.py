@@ -43,6 +43,9 @@ class TodoController(Resource):
         if not todo:
             return response.not_found('Todo not found!', '')
 
+        if todo.deleted_at:
+            return response.bad_request('Todo already deleted!', '')
+
         todo.deleted_at = datetime.now()
         todo.save()
 
