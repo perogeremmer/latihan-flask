@@ -3,10 +3,8 @@ from flask import request
 from datetime import datetime
 from app.models.todo import Todo
 
-from app.response import Response
+from app.response import response
 from app.transformer.TodoTransformer import TodoTransformer
-
-response = Response()
 class TodoController(Resource):
     def get(self):
         todos = Todo.objects(deleted_at=None).all()
