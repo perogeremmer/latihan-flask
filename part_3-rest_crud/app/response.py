@@ -10,7 +10,7 @@ class Response(object):
         return Response.__instance
 
     def __init__(self):
-        self.status_code = 200
+        self.status_code = None
         
         self.payload = {
             "values": None,
@@ -26,6 +26,8 @@ class Response(object):
         return make_response(jsonify(self.payload), self.status_code)
 
     def ok(self, message, values):
+        self.status_code = 200
+
         return self.create_payload_response(message, values)
 
     def bad_request(self, message, values):
