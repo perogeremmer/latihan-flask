@@ -1,12 +1,14 @@
 from flask import make_response, jsonify
 
 class Response(object):
-    payload = {
-        "values": None,
-        "message": ""
-    }
 
-    code_status = 200
+    def __init__(self):
+        self.code_status = 200
+        
+        self.payload = {
+            "values": None,
+            "message": ""
+        }
 
     def create_payload_response(self, message, values):
         self.payload["values"] = values
