@@ -5,7 +5,7 @@ class BaseTransformer:
 
 
     @classmethod
-    def transform(cls, values):
+    def transform(cls, values: list):
         data = []
 
         if len(values) < 1:
