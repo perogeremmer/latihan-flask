@@ -12,7 +12,6 @@ class TodoController(Resource):
         if not id:
             q = request.args.get('q')
 
-
             todos = Todo.objects(title__contains=q, deleted_at=None).all()
             todos = TodoTransformer.transform(todos)
         else:
