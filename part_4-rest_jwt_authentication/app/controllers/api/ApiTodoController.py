@@ -5,18 +5,22 @@ from app.models.todo import Todo
 
 from app.response import response
 from app.transformer.TodoTransformer import TodoTransformer
-from app.libraries.access_jwt import jwt_required
+from app.libraries.access_jwt import jwt_required, get_identity
 
 class TodoController(Resource):
+
     @jwt_required
     def get(self, id=None):
+        user_id = get_identity()['id']
+
         if not id:
             q = request.args.get('q')
 
-            todos = Todo.objects(title__contains=q, deleted_at=None).all()
+
+            todos = Todo.objects(title__contains=q, deleted_at=None, user_id=user_id).all()
             todos = TodoTransformer.transform(todos)
         else:
-            todos = Todo.objects(id=id, deleted_at=None).first()
+            todos = Todo.objects(id=id, deleted_at=None, user_id=user_id).first()
             
             if not todos:
                 return response.bad_request('Todo not found!', '')
@@ -25,11 +29,15 @@ class TodoController(Resource):
 
         return response.ok('', todos)
 
+    @jwt_required
     def post(self):
         try:
+            user_id = get_identity()['id']
+
             todo = Todo()
             todo.title = request.json['title']
             todo.description = request.json['description']
+            todo.user_id = user_id
             todo.save()
 
             return response.ok('Todo Created!', TodoTransformer.single_transform(todo))
@@ -37,11 +45,17 @@ class TodoController(Resource):
             return response.bad_request(e, '')
 
 
+    @jwt_required
     def put(self, id):
+        user_id = get_identity()['id']
+
         todo = Todo.objects(id=id).first()
 
         if not todo:
             return response.not_found('Todo not found!', '')
+
+        if str(todo.user_id) != user_id:
+            raise Exception("The owner is invalid!")
 
         todo.title = request.json['title']
         todo.description = request.json['description']
@@ -51,14 +65,21 @@ class TodoController(Resource):
 
         return response.ok('Todo Updated!', TodoTransformer.single_transform(todo))
 
+    @jwt_required
     def delete(self, id):
+        user_id = get_identity()['id']
+        
         todo = Todo.objects(id=id).first()
 
         if not todo:
             return response.not_found('Todo not found!', '')
 
+        if str(todo.user_id) != user_id:
+            raise Exception("The owner is invalid!")
+
         if todo.deleted_at:
             return response.bad_request('Todo already deleted!', '')
+
 
         todo.deleted_at = datetime.now()
         todo.save()

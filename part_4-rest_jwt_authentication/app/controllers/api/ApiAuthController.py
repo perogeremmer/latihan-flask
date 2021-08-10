@@ -1,14 +1,16 @@
-from flask_jwt_extended.utils import create_refresh_token
+from flask_jwt_extended.internal_utils import verify_token_type
+from flask_jwt_extended.utils import create_refresh_token, get_jwt, get_jwt_header, get_jwt_identity
 from flask_restful import Resource
 from flask import request
 from datetime import timedelta
 from app.models.user import User
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, verify_jwt_in_request
 
 from app.response import response
 from app.transformer.UserTransformer import UserTransformer
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from app.libraries.access_jwt import refresh_jwt_required
 
 class RegisterController(Resource):
     def post(self):
@@ -61,6 +63,7 @@ class AuthController(Resource):
             return response.bad_request("{}".format(e), '')
 
 
+
 class TokenGenerator(object):
     def __init__(self, user):
         self.user = user
@@ -91,3 +94,25 @@ class TokenGenerator(object):
 
         return self.user
 
+
+class RefreshTokenController(Resource):
+    @refresh_jwt_required
+    def post(self):
+        try:
+
+            token = get_jwt()
+            
+            if 'type' not in token and token['type'] != "refresh":
+                return response.un_authorized("Token is not refresh token!", "");
+
+            jwt_identity = get_jwt_identity()
+            user = User.objects(id=jwt_identity['id']).first()
+
+            if not user:
+                return response.bad_request("Token is not valid", "")
+
+            payload = TokenGenerator(user).generate_access_token()
+
+            return response.ok(f'Token refreshed!', payload)
+        except Exception as e:
+            return response.bad_request("{}".format(e), '')
