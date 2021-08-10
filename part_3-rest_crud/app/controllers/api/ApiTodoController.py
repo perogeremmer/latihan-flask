@@ -45,7 +45,6 @@ class TodoController(Resource):
         todo.title = request.json['title']
         todo.description = request.json['description']
         todo.done = request.json['done']
-        todo.updated_at = datetime.now()
         todo.save()
 
         return response.ok('Todo Updated!', TodoTransformer.single_transform(todo))
