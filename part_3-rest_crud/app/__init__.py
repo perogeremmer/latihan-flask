@@ -1,7 +1,7 @@
 
 from flask import Flask
-from app.config import Config
 from flask_restful import Api # Memanggil library RESTful
+from app.config import Config
 
 
 app = Flask(__name__, template_folder='views')
