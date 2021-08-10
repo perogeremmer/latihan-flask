@@ -1,6 +1,6 @@
 
 from flask import Flask
-from flask.config import Config
+from app.config import Config
 from flask_restful import Api # Memanggil library RESTful
 
 
