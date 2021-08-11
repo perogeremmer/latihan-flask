@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h5 class="mb-4">Judul Halaman</h5>
+
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %} {% endif %} {% endwith %}
+
+            <table class="table table-hover ">
+                <thead>
+                    <tr>
+                        <th scope="col ">Title</th>
+                        <th scope="col ">Description</th>
+                        <th scope="col ">Created At</th>
+                        <th scope="col ">Status</th>
+                        <th scope="col ">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in todo %}
+                    <tr>
+                        <td>{{ item['title'] }}</td>
+                        <td>{{ item['description'] }}</td>
+                        <td>{{ item['created_at'] }}</td>
+                        <td>
+                            {% if item['done'] %}
+                            <span class="badge badge-info text-white ">Done</span> {% else %}
+                            <span class="badge badge-danger text-white ">Pending</span> {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group " role="group " aria-label="Basic example ">
+                                {% if not item['done'] %}
+                                <a href="/todo/{{ item['id'] }}/finish" class="btn btn-primary text-white ">
+                                    <i class='bx bx-check'></i>
+                                </a>
+                                {% endif %}
+                                <a href="/todo/{{ item['id'] }} " class="btn btn-info text-white ">
+                                    <i class='bx bx-pencil'></i>
+                                </a>
+                                <form action="/todo/{{ item['id'] }}/delete" method="POST" onSubmit="return confirm('Do you really want to delete to-do?');">
+                                    <button type="submit" class="btn btn-danger text-white ">
+                                        <i class='bx bx-trash'></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
