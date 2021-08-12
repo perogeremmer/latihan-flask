@@ -59,7 +59,7 @@ class WebTodoFinishController(Resource):
             todo.done = True
             todo.save()
 
-            msg = 'Successfully finished to-do!'
+            msg = 'Successfully finish to-do!'
             flash(msg, 'success')
 
             return redirect('/todo')
