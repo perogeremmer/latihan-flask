@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h5 class="mb-4">Welcome! Please sign in with your registered account.</h5>
+
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %} {% endif %} {% endwith %}
+
+            <form action="/sign-in" method="POST">
+                <div class="form-group">
+                    <label for="example-todo-title">Email</label>
+                    <input name="email" type="email" class="form-control" id="example-todo-title" aria-describedby="emailHelp" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="example-todo-title">Password</label>
+                    <input name="password" type="password" class="form-control" id="example-todo-title" aria-describedby="emailHelp" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-12 mt-5">
+            <p>Don't have any account? Register <a href="/register">here</a>.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'components/head.html' %} {% block headers %} {% endblock %}
+</head>
+
+<body>
+    {% include 'components/navbar.html' %}
+
+    <main role="main " class="container mt-5">
+        <div class="container">
+            <h1 class="mt-5 ">Welcome to Belajar Bareng Hudya</h1>
+            <p class="lead mb-5">Which is more difficult, coding or counting? Not both of them, the difficult one is sharing your knowledge with people without asking for the payment. <br/> <small>- Hudya</small></p>
+            <p>Kunjungi blog belajar bareng Hudya dengan akses gratis <a href="https://hudya.xyz ">disini</a>.</p>
+        </div>
+
+        {% block content %} {% endblock %}
+    </main>
+
+    {% include 'components/footer.html' %} {% include 'components/scripts.html' %} {% block scripts %}{% endblock %}
+</body>
+
+</html>
