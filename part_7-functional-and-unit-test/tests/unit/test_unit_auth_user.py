@@ -4,11 +4,6 @@ def test_create_user(client):
     user = User(name="Hudya", email="hudya@example.com")
     assert user.name == "Hudya"
 
-    # response = client.get('/api/')
-
-    # data = json.loads(response.get_data(as_text=True))
-    # assert data['message'] == 'Hello World!'
-
 def test_create_user_with_empty_name(client):
     user = User(name="", email="hudya@example.com")
     assert user.name == ""
