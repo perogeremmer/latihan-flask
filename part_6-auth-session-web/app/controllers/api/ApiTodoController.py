@@ -42,7 +42,7 @@ class TodoController(Resource):
 
             return response.ok('Todo Created!', TodoTransformer.single_transform(todo))
         except Exception as e:
-            return response.bad_request(e, '')
+            return response.bad_request("{}".format(e), '')
 
 
     @jwt_required
