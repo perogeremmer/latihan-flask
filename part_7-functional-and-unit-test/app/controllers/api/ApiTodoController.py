@@ -35,7 +35,7 @@ class TodoController(Resource):
             user_id = get_identity()['id']
 
             if not request.json['title']:
-                return response.bad_request('Title is required!', '')
+                raise Exception('Title is required')
 
             todo = Todo()
             todo.title = request.json['title']
@@ -45,7 +45,7 @@ class TodoController(Resource):
 
             return response.ok('Todo Created!', TodoTransformer.single_transform(todo))
         except Exception as e:
-            return response.bad_request(e, '')
+            return response.bad_request("{}".format(e), '')
 
 
     @jwt_required
