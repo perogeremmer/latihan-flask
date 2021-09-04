@@ -54,7 +54,7 @@ class TodoController(Resource):
             if not todo:
                 return response.not_found('Todo not found!', '')
 
-            if str(todo.user_id) != user_id:
+            if str(todo.user_id.id) != user_id:
                 raise Exception("The owner is invalid!")
 
             todo.title = request.json['title']
@@ -77,7 +77,7 @@ class TodoController(Resource):
             if not todo:
                 return response.not_found('Todo not found!', '')
 
-            if str(todo.user_id) != user_id:
+            if str(todo.user_id.id) != user_id:
                 raise Exception("The owner is invalid!")
 
             if todo.deleted_at:
