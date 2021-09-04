@@ -2,20 +2,20 @@ import json
 
 def test_create_user(client, database):
     payload = {
-        "name": "John",
-        "email": "john@example.com",
+        "name": "Hudya",
+        "email": "hudya@example.com",
         "password": "12345678",
         "confirmation_password": "12345678",
     }
     response = client.post('/api/register', json=payload)
 
     data = json.loads(response.get_data(as_text=True))
-    assert data['values']['name'] == 'John'
+    assert data['values']['name'] == 'Hudya'
 
 def test_create_user_with_empty_name(client, database):
     payload = {
         "name": "",
-        "email": "john@example.com",
+        "email": "hudya@example.com",
         "password": "12345678",
         "confirmation_password": "12345678",
     }
@@ -26,7 +26,7 @@ def test_create_user_with_empty_name(client, database):
 
 def test_create_user_with_empty_email(client, database):
     payload = {
-        "name": "John",
+        "name": "Hudya",
         "email": "",
         "password": "12345678",
         "confirmation_password": "12345678",
@@ -36,8 +36,8 @@ def test_create_user_with_empty_email(client, database):
 
 def test_create_user_with_empty_password(client, database):
     payload = {
-        "name": "John",
-        "email": "john@example.com",
+        "name": "Hudya",
+        "email": "hudya@example.com",
         "password": "",
         "confirmation_password": "12345678",
     }
@@ -46,8 +46,8 @@ def test_create_user_with_empty_password(client, database):
 
 def test_create_user_with_empty_confirmation_password(client, database):
     payload = {
-        "name": "John",
-        "email": "john@example.com",
+        "name": "Hudya",
+        "email": "hudya@example.com",
         "password": "12345678",
         "confirmation_password": "",
     }
@@ -56,8 +56,8 @@ def test_create_user_with_empty_confirmation_password(client, database):
 
 def test_auth_user(client, database):
     payload = {
-        "name": "John",
-        "email": "john@example.com",
+        "name": "Hudya",
+        "email": "hudya@example.com",
         "password": "12345678",
         "confirmation_password": "12345678",
     }
@@ -65,20 +65,20 @@ def test_auth_user(client, database):
 
 
     payload = {
-        "email": "john@example.com",
+        "email": "hudya@example.com",
         "password": "12345678",
     }
     response = client.post('/api/login', json=payload)
     assert response.status_code == 200
 
     data = json.loads(response.get_data(as_text=True))
-    assert data['values']['name'] == "John"
+    assert data['values']['name'] == "Hudya"
     assert 'token' in data['values']
 
 def test_auth_user_with_wrong_password(client, database):
     payload = {
-        "name": "John",
-        "email": "john@example.com",
+        "name": "Hudya",
+        "email": "hudya@example.com",
         "password": "12345678",
         "confirmation_password": "12345678",
     }
@@ -86,7 +86,7 @@ def test_auth_user_with_wrong_password(client, database):
 
 
     payload = {
-        "email": "john@example.com",
+        "email": "hudya@example.com",
         "password": "123456789",
     }
     response = client.post('/api/login', json=payload)
@@ -94,8 +94,8 @@ def test_auth_user_with_wrong_password(client, database):
 
 def test_auth_user_with_empty_password(client, database):
     payload = {
-        "name": "John",
-        "email": "john@example.com",
+        "name": "Hudya",
+        "email": "hudya@example.com",
         "password": "12345678",
         "confirmation_password": "12345678",
     }
@@ -103,7 +103,7 @@ def test_auth_user_with_empty_password(client, database):
 
 
     payload = {
-        "email": "john@example.com",
+        "email": "hudya@example.com",
         "password": "",
     }
     response = client.post('/api/login', json=payload)
