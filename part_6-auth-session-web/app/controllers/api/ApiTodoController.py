@@ -47,41 +47,47 @@ class TodoController(Resource):
 
     @jwt_required
     def put(self, id):
-        user_id = get_identity()['id']
+        try:
+            user_id = get_identity()['id']
 
-        todo = Todo.objects(id=id).first()
+            todo = Todo.objects(id=id).first()
 
-        if not todo:
-            return response.not_found('Todo not found!', '')
+            if not todo:
+                return response.not_found('Todo not found!', '')
 
-        if str(todo.user_id.id) != user_id:
-            raise Exception("The owner is invalid!")
+            if str(todo.user_id.id) != user_id:
+                raise Exception("The owner is invalid!")
 
-        todo.title = request.json['title']
-        todo.description = request.json['description']
-        todo.done = request.json['done']
-        todo.updated_at = datetime.now()
-        todo.save()
+            todo.title = request.json['title']
+            todo.description = request.json['description']
+            todo.done = request.json['done']
+            todo.updated_at = datetime.now()
+            todo.save()
 
-        return response.ok('Todo Updated!', TodoTransformer.single_transform(todo))
+            return response.ok('Todo Updated!', TodoTransformer.single_transform(todo))
+        except Exception as e:
+            return response.bad_request("{}".format(e), '')
 
     @jwt_required
     def delete(self, id):
-        user_id = get_identity()['id']
-        
-        todo = Todo.objects(id=id).first()
+        try:
+            user_id = get_identity()['id']
+            
+            todo = Todo.objects(id=id).first()
 
-        if not todo:
-            return response.not_found('Todo not found!', '')
+            if not todo:
+                return response.not_found('Todo not found!', '')
 
-        if str(todo.user_id.id) != user_id:
-            raise Exception("The owner is invalid!")
+            if str(todo.user_id.id) != user_id:
+                raise Exception("The owner is invalid!")
 
-        if todo.deleted_at:
-            return response.bad_request('Todo already deleted!', '')
+            if todo.deleted_at:
+                return response.bad_request('Todo already deleted!', '')
 
 
-        todo.deleted_at = datetime.now()
-        todo.save()
+            todo.deleted_at = datetime.now()
+            todo.save()
 
-        return response.ok('Todo Deleted!', TodoTransformer.single_transform(todo))
+            return response.ok('Todo Deleted!', TodoTransformer.single_transform(todo))
+        except Exception as e:
+            return response.bad_request("{}".format(e), '')
